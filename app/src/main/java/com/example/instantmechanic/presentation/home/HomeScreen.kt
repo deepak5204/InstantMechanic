@@ -19,7 +19,9 @@ import com.example.instantmechanic.data.dummy.DummyMechanicsData
 import com.example.instantmechanic.domain.model.Mechanic
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    onMechanicClick : (Mechanic) -> Unit
+) {
 
     val mechanics = DummyMechanicsData.mechanics
 
@@ -30,15 +32,18 @@ fun HomeScreen() {
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(mechanics) { mechanic ->
-            MechanicCard(mechanic = mechanic)
+            MechanicCard(mechanic = mechanic, onClick = {
+                onMechanicClick(mechanic)
+            })
         }
     }
 }
 
 @Composable
-fun MechanicCard(mechanic: Mechanic) {
+fun MechanicCard(mechanic: Mechanic, onClick: () -> Unit) {
 
     Card(
+        onClick = { onClick()},
         modifier = Modifier
             .fillMaxWidth()
     ) {
@@ -74,6 +79,8 @@ fun MechanicCard(mechanic: Mechanic) {
 @Preview(showBackground = false)
 @Composable
 private fun HomeScreenPreview() {
-    HomeScreen()
+    HomeScreen(
+        onMechanicClick = {}
+    )
 
 }

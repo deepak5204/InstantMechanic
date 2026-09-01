@@ -18,16 +18,32 @@ fun AppNavHost(modifier: Modifier = Modifier) {
     NavHost(navController = navController, startDestination = Screen.Home.route) {
 
         composable(route = Screen.Home.route){
-            HomeScreen()
-        }
-
-        composable(route = Screen.Details.route) {
-            MechanicDetailsScreen(
-                mechanic = DummyMechanicsData.mechanics[0],
-                onRequestServiceClick = {
-
+            HomeScreen(
+                onMechanicClick = { mechanic ->
+                    navController.navigate(
+                        "${Screen.Details.route}/${mechanic.id}"
+                    )
                 }
             )
+        }
+
+        composable("${Screen.Details.route}/{mechanicId}") { backStackEntry ->
+
+            val mechanicId = backStackEntry.arguments
+                ?.getString("mechanicId")
+                ?.toIntOrNull()
+
+            val mechanic = DummyMechanicsData.mechanics
+                .find { it.id == mechanicId }
+
+            if (mechanic != null) {
+                MechanicDetailsScreen(
+                    mechanic = mechanic,
+                    onRequestServiceClick = {
+                        navController.navigate(Screen.RequestService.route)
+                    }
+                )
+            }
         }
 
         composable(route = Screen.RequestService.route){
