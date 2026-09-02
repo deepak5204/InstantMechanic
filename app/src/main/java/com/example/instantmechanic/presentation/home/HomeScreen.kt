@@ -24,14 +24,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.widget.ContentLoadingProgressBar
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.instantmechanic.domain.model.Mechanic
 import com.example.instantmechanic.presentation.viewModel.MechanicViewModel
 
 @Composable
 fun HomeScreen(
     onMechanicClick : (Mechanic) -> Unit,
-    viewModel: MechanicViewModel = viewModel()
+    viewModel: MechanicViewModel = hiltViewModel()
 ) {
 
     val uiState by viewModel.uiState.collectAsState()

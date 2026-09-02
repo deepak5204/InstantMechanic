@@ -4,8 +4,11 @@ import com.example.instantmechanic.data.dummy.DummyMechanicsData
 import com.example.instantmechanic.data.remote.MechanicApiService
 import com.example.instantmechanic.domain.model.Mechanic
 import kotlinx.coroutines.delay
+import javax.inject.Inject
 
-class MechanicRepository() {
+class MechanicRepository @Inject constructor(
+    private val apiService: MechanicApiService
+) {
 
 
      suspend fun getMechanics(): List<Mechanic> {

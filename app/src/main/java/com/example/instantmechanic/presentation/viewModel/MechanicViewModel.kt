@@ -5,12 +5,16 @@ import androidx.lifecycle.viewModelScope
 import com.example.instantmechanic.data.repository.MechanicRepository
 import com.example.instantmechanic.domain.model.Mechanic
 import com.example.instantmechanic.presentation.home.MechanicUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class MechanicViewModel : ViewModel() {
-    private val repository = MechanicRepository()
+@HiltViewModel
+class MechanicViewModel @Inject constructor(
+    private val repository: MechanicRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow<MechanicUiState>(MechanicUiState.Loading)
     val uiState: StateFlow<MechanicUiState> = _uiState
