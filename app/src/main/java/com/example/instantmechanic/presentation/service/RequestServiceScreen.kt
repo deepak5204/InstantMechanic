@@ -1,19 +1,41 @@
 package com.example.instantmechanic.presentation.service
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -27,9 +49,7 @@ import com.example.instantmechanic.domain.model.Mechanic
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RequestServiceScreen(
-    mechanic: Mechanic,
-    onBackClick: () -> Unit = {},
-    onSubmitClick: () -> Unit
+    mechanic: Mechanic, onBackClick: () -> Unit = {}, onSubmitClick: () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -51,64 +71,50 @@ fun RequestServiceScreen(
     LaunchedEffect(isSubmitted) {
         if (isSubmitted) {
             Toast.makeText(
-                context,
-                "Service request submitted successfully!",
-                Toast.LENGTH_LONG
+                context, "Service request submitted successfully!", Toast.LENGTH_LONG
             ).show()
             onSubmitClick()
         }
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "Request Service",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold
-                    )
+    Scaffold(topBar = {
+        TopAppBar(
+            title = {
+                Text(
+                    text = "Request Service",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        )
+    }, bottomBar = {
+        Surface(
+            shadowElevation = 8.dp, color = MaterialTheme.colorScheme.surface
+        ) {
+            Button(
+                onClick = {
+                    nameError = customerName.isBlank()
+                    phoneError = phoneNumber.isBlank()
+                    vehicleError = vehicleNumber.isBlank()
+                    serviceError = selectedService.isBlank()
+                    if (!nameError && !phoneError && !vehicleError && !serviceError) {
+                        isSubmitted = true
+                    }
                 },
-//                navigationIcon = {
-//                    IconButton(onClick = onBackClick) {
-//                        Icon(
-//                            imageVector = Icons.Default.ArrowBack,
-//                            contentDescription = "Navigate back"
-//                        )
-//                    }
-//                }
-            )
-        },
-        bottomBar = {
-            Surface(
-                shadowElevation = 8.dp,
-                color = MaterialTheme.colorScheme.surface
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .height(52.dp),
+                shape = RoundedCornerShape(12.dp)
             ) {
-                Button(
-                    onClick = {
-                        nameError = customerName.isBlank()
-                        phoneError = phoneNumber.isBlank()
-                        vehicleError = vehicleNumber.isBlank()
-                        serviceError = selectedService.isBlank()
-                        if (!nameError && !phoneError && !vehicleError && !serviceError) {
-                            isSubmitted = true
-                        }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                        .height(52.dp),
-                    shape = RoundedCornerShape(12.dp)
-                ) {
-                    Text(
-                        text = "Submit Request",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+                Text(
+                    text = "Submit Request",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
-    ) { paddingValues ->
+    }) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -121,9 +127,7 @@ fun RequestServiceScreen(
             Card(
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-                ),
-                shape = RoundedCornerShape(12.dp),
-                modifier = Modifier.fillMaxWidth()
+                ), shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth()
             ) {
                 Column(
                     modifier = Modifier.padding(16.dp),
@@ -196,8 +200,7 @@ fun RequestServiceScreen(
             // Service Selection Dropdown
             ExposedDropdownMenuBox(
                 expanded = isServiceMenuExpanded,
-                onExpandedChange = { isServiceMenuExpanded = !isServiceMenuExpanded }
-            ) {
+                onExpandedChange = { isServiceMenuExpanded = !isServiceMenuExpanded }) {
                 OutlinedTextField(
                     value = selectedService,
                     onValueChange = {},
@@ -217,17 +220,13 @@ fun RequestServiceScreen(
 
                 ExposedDropdownMenu(
                     expanded = isServiceMenuExpanded,
-                    onDismissRequest = { isServiceMenuExpanded = false }
-                ) {
+                    onDismissRequest = { isServiceMenuExpanded = false }) {
                     mechanic.services.forEach { service ->
-                        DropdownMenuItem(
-                            text = { Text(service.name) },
-                            onClick = {
-                                selectedService = service.name
-                                serviceError = false
-                                isServiceMenuExpanded = false
-                            }
-                        )
+                        DropdownMenuItem(text = { Text(service.name) }, onClick = {
+                            selectedService = service.name
+                            serviceError = false
+                            isServiceMenuExpanded = false
+                        })
                     }
                 }
             }
@@ -254,8 +253,6 @@ fun RequestServiceScreen(
 private fun RequestServiceScreenPreview() {
     MaterialTheme {
         RequestServiceScreen(
-            mechanic = DummyMechanicsData.mechanics[0],
-            onSubmitClick = {}
-        )
+            mechanic = DummyMechanicsData.mechanics[0], onSubmitClick = {})
     }
 }

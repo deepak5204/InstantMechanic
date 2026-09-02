@@ -3,7 +3,6 @@ package com.example.instantmechanic.presentation.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.instantmechanic.data.repository.MechanicRepository
-import com.example.instantmechanic.domain.model.Mechanic
 import com.example.instantmechanic.presentation.home.MechanicUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
@@ -30,8 +29,7 @@ class MechanicViewModel @Inject constructor(
 
                 _uiState.value = MechanicUiState.Success(mechanics)
             } catch (e: Exception) {
-                _uiState.value =
-                    MechanicUiState.Error("Something went wrong")
+                _uiState.value = MechanicUiState.Error("Something went wrong")
             }
         }
     }

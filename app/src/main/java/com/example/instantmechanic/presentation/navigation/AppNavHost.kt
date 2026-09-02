@@ -1,7 +1,6 @@
 package com.example.instantmechanic.presentation.navigation
 
 import MechanicDetailsScreen
-import android.R.string.no
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
@@ -18,56 +17,45 @@ fun AppNavHost(modifier: Modifier = Modifier) {
 
     NavHost(navController = navController, startDestination = Screen.Home.route) {
 
-        composable(route = Screen.Home.route){
+        composable(route = Screen.Home.route) {
             HomeScreen(
                 onMechanicClick = { mechanic ->
                     navController.navigate(
                         "${Screen.Details.route}/${mechanic.id}"
                     )
-                }
-            )
+                })
         }
 
         composable("${Screen.Details.route}/{mechanicId}") { backStackEntry ->
 
-            val mechanicId = backStackEntry.arguments
-                ?.getString("mechanicId")
-                ?.toIntOrNull()
+            val mechanicId = backStackEntry.arguments?.getString("mechanicId")?.toIntOrNull()
 
-            val mechanic = DummyMechanicsData.mechanics
-                .find { it.id == mechanicId }
+            val mechanic = DummyMechanicsData.mechanics.find { it.id == mechanicId }
 
             if (mechanic != null) {
                 MechanicDetailsScreen(
-                    mechanic = mechanic,
-                    onRequestService = {
+                    mechanic = mechanic, onRequestService = {
                         navController.navigate(
                             "${Screen.RequestService.route}/${mechanic.id}"
                         )
-                    },
-
+                    }
                 )
             }
         }
 
         composable("${Screen.RequestService.route}/{mechanicId}") { backStackEntry ->
 
-            val mechanicId = backStackEntry.arguments
-                ?.getString("mechanicId")
-                ?.toIntOrNull()
+            val mechanicId = backStackEntry.arguments?.getString("mechanicId")?.toIntOrNull()
 
-            val mechanic = DummyMechanicsData.mechanics
-                .find { it.id == mechanicId }
+            val mechanic = DummyMechanicsData.mechanics.find { it.id == mechanicId }
 
             if (mechanic != null) {
                 RequestServiceScreen(
-                    mechanic = mechanic,
-                    onSubmitClick = {
+                    mechanic = mechanic, onSubmitClick = {
                         navController.navigate(Screen.Home.route)
-                    }
-                )
+                    })
             }
         }
     }
-    
+
 }

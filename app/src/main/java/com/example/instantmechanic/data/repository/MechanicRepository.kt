@@ -11,10 +11,10 @@ class MechanicRepository @Inject constructor(
 ) {
 
 
-     suspend fun getMechanics(): List<Mechanic> {
+    suspend fun getMechanics(): List<Mechanic> {
 
-         delay(1000)
-         return DummyMechanicsData.mechanics
+        delay(1000)
+        return DummyMechanicsData.mechanics
 
         // here remote api
 
