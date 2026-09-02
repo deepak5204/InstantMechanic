@@ -1,5 +1,6 @@
 package com.example.instantmechanic.presentation.service
 
+import android.R.id.input
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -43,13 +44,15 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.instantmechanic.data.dummy.DummyMechanicsData
 import com.example.instantmechanic.domain.model.Mechanic
+import com.example.instantmechanic.presentation.viewModel.MechanicViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RequestServiceScreen(
-    mechanic: Mechanic, onBackClick: () -> Unit = {}, onSubmitClick: () -> Unit
+    mechanic: Mechanic, onBackClick: () -> Unit = {}, onSubmitClick: () -> Unit,viewModel: MechanicViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
 
@@ -166,9 +169,14 @@ fun RequestServiceScreen(
             // Phone Number Field
             OutlinedTextField(
                 value = phoneNumber,
-                onValueChange = {
-                    phoneNumber = it
-                    if (phoneError) phoneError = false
+                onValueChange = { input ->
+
+                    if (input.length <= 10 && input.all { it.isDigit() }) {
+                        phoneNumber = input
+                    }
+                    if (phoneError) {
+                        phoneError = !viewModel.isValidPhoneNumber(input)
+                    }
                 },
                 label = { Text("Phone Number") },
                 leadingIcon = { Icon(Icons.Default.Phone, contentDescription = null) },
