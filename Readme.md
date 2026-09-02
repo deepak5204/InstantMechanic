@@ -6,6 +6,7 @@ Instant Mechanic is a mini Android application built as an internship assignment
 
 
 ## Screenshots
+
 ### Home Screen
 ![Home Screen](screenshots/home_screen.png)
 
@@ -64,6 +65,9 @@ The form includes basic validation and displays a confirmation message after suc
 ## Architecture
 
 The application follows a simple layered architecture:
+
+### Work Flow Design
+![Work Flow](screenshots/workflow_design.png)
 
 ```text
 Presentation
