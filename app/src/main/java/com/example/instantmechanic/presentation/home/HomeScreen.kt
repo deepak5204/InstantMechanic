@@ -25,7 +25,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.instantmechanic.data.remote.RetrofitClient
 import com.example.instantmechanic.domain.model.Mechanic
 import com.example.instantmechanic.presentation.viewModel.MechanicViewModel
 
