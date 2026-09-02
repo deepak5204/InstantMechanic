@@ -1,22 +1,34 @@
 package com.example.instantmechanic.presentation.viewModel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.instantmechanic.data.repository.MechanicRepository
 import com.example.instantmechanic.domain.model.Mechanic
+import com.example.instantmechanic.presentation.home.MechanicUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 class MechanicViewModel : ViewModel() {
     private val repository = MechanicRepository()
 
-    private val _mechanics = MutableStateFlow<List<Mechanic>>(emptyList())
-    val mechanics: StateFlow<List<Mechanic>> = _mechanics
+    private val _uiState = MutableStateFlow<MechanicUiState>(MechanicUiState.Loading)
+    val uiState: StateFlow<MechanicUiState> = _uiState
 
     init {
         loadMechanics()
     }
 
     private fun loadMechanics() {
-        _mechanics.value = repository.getMechanics()
+        viewModelScope.launch {
+            try {
+                val mechanics = repository.getMechanics()
+
+                _uiState.value = MechanicUiState.Success(mechanics)
+            } catch (e: Exception) {
+                _uiState.value =
+                    MechanicUiState.Error("Something went wrong")
+            }
+        }
     }
 }
