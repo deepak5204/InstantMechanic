@@ -6,15 +6,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.instantmechanic.data.dummy.DummyMechanicsData
+import com.example.instantmechanic.domain.model.Mechanic
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RequestServiceScreen() {
+fun RequestServiceScreen(
+    mechanic: Mechanic
+) {
 
     var customerName by remember {
         mutableStateOf("")
@@ -28,6 +37,15 @@ fun RequestServiceScreen() {
         mutableStateOf("")
     }
 
+
+    var selectedService by remember {
+        mutableStateOf("")
+    }
+
+    var isServiceMenuExpanded by remember {
+        mutableStateOf(false)
+    }
+
     var problemDescription by remember {
         mutableStateOf("")
     }
@@ -35,6 +53,7 @@ fun RequestServiceScreen() {
     var isSubmitted by remember {
         mutableStateOf(false)
     }
+
 
     Column(
         modifier = Modifier
@@ -72,6 +91,53 @@ fun RequestServiceScreen() {
             modifier = Modifier.fillMaxWidth()
         )
 
+
+        ExposedDropdownMenuBox(
+            expanded = isServiceMenuExpanded,
+            onExpandedChange = {
+                isServiceMenuExpanded = !isServiceMenuExpanded
+            }
+        ) {
+
+            OutlinedTextField(
+                value = selectedService,
+                onValueChange = {},
+                readOnly = true,
+                label = {
+                    Text("Select Service")
+                },
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(
+                        expanded = isServiceMenuExpanded
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor()
+            )
+
+            ExposedDropdownMenu(
+                expanded = isServiceMenuExpanded,
+                onDismissRequest = {
+                    isServiceMenuExpanded = false
+                }
+            ) {
+
+                mechanic.services.forEach { service ->
+
+                    DropdownMenuItem(
+                        text = {
+                            Text(service)
+                        },
+                        onClick = {
+                            selectedService = service
+                            isServiceMenuExpanded = false
+                        }
+                    )
+                }
+            }
+        }
+
         OutlinedTextField(
             value = problemDescription,
             onValueChange = { problemDescription = it },
@@ -101,6 +167,8 @@ fun RequestServiceScreen() {
 @Preview(showBackground = true)
 @Composable
 private fun RequestServiceScreenPreview() {
-    RequestServiceScreen()
+    RequestServiceScreen(
+        mechanic = DummyMechanicsData.mechanics[0]
+    )
 
 }
