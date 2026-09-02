@@ -33,4 +33,8 @@ class MechanicViewModel @Inject constructor(
             }
         }
     }
+
+    fun retry() {
+        loadMechanics()
+    }
 }

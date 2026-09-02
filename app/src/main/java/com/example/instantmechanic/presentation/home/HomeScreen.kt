@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.instantmechanic.domain.model.Mechanic
+import com.example.instantmechanic.presentation.utils.ErrorScreen
 import com.example.instantmechanic.presentation.viewModel.MechanicViewModel
 
 @Composable
@@ -82,7 +83,10 @@ fun HomeScreen(
         }
 
         is MechanicUiState.Error -> {
-            Text(state.message)
+            ErrorScreen(
+                message = state.message,
+                onRetryClick = { viewModel.retry() } // Call your ViewModel retry function
+            )
         }
     }
 }
