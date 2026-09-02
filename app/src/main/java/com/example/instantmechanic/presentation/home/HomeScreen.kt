@@ -140,7 +140,7 @@ fun MechanicCard(
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = "${mechanic.rating}",
+                        text = "${mechanic.rating} (${mechanic.ratingCount ?: 0} reviews)",
                         style = MaterialTheme.typography.bodyMedium.copy(
                             fontWeight = FontWeight.Medium, fontSize = 14.sp
                         ),
@@ -187,23 +187,23 @@ fun MechanicCard(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Row 4: Single Primary CTA
-            Button(
-                onClick = onViewDetailsClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(44.dp),
-                shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF0F172A), contentColor = Color.White
-                )
-            ) {
-                Text(
-                    text = "View Details", style = MaterialTheme.typography.bodyMedium.copy(
-                        fontWeight = FontWeight.SemiBold, fontSize = 14.sp
-                    )
-                )
-            }
+//            // Row 4: Single Primary CTA
+//            Button(
+//                onClick = onViewDetailsClick,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(44.dp),
+//                shape = RoundedCornerShape(8.dp),
+//                colors = ButtonDefaults.buttonColors(
+//                    containerColor = Color(0xFF0F172A), contentColor = Color.White
+//                )
+//            ) {
+//                Text(
+//                    text = "View Details", style = MaterialTheme.typography.bodyMedium.copy(
+//                        fontWeight = FontWeight.SemiBold, fontSize = 14.sp
+//                    )
+//                )
+//            }
         }
     }
 }

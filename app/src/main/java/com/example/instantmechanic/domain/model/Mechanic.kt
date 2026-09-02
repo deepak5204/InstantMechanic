@@ -6,7 +6,7 @@ data class Mechanic(
     val id: Int,
     val garageName: String,
     val rating: Double,
-    val ratingCount: String ?= null,
+    val ratingCount: Int ?= null,
     val distance: String,
     val location: String,
     val services: List<MechanicService>,
