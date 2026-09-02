@@ -22,7 +22,8 @@ import com.example.instantmechanic.domain.model.Mechanic
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RequestServiceScreen(
-    mechanic: Mechanic
+    mechanic: Mechanic,
+    onSubmitClick: () -> Unit
 ) {
 
     var customerName by remember {
@@ -52,6 +53,10 @@ fun RequestServiceScreen(
 
     var isSubmitted by remember {
         mutableStateOf(false)
+    }
+
+    var errorMessage by remember {
+        mutableStateOf("")
     }
 
 
@@ -149,13 +154,35 @@ fun RequestServiceScreen(
 
         Button(
             onClick = {
-                isSubmitted = true
+                if (customerName.isBlank()) {
+                    errorMessage = "Please enter your name"
+                } else if (phoneNumber.isBlank()) {
+                    errorMessage = "Please enter your phone number"
+                } else if (vehicleNumber.isBlank()) {
+                    errorMessage = "Please enter your vehicle number"
+                } else if (selectedService.isBlank()) {
+                    errorMessage = "Please select a service"
+                } else if (problemDescription.isBlank()) {
+                    errorMessage = "Please describe the problem"
+                } else {
+                    errorMessage = ""
+                    isSubmitted = true
+                    onSubmitClick()
+                }
             },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Submit Request")
         }
 
+
+        if (errorMessage.isNotEmpty()) {
+            Text(
+                text = errorMessage
+            )
+        }
+
+        // here need to show toast
         if (isSubmitted) {
             Text(
                 text = "Service request submitted successfully!"
@@ -168,7 +195,10 @@ fun RequestServiceScreen(
 @Composable
 private fun RequestServiceScreenPreview() {
     RequestServiceScreen(
-        mechanic = DummyMechanicsData.mechanics[0]
+        mechanic = DummyMechanicsData.mechanics[0],
+        onSubmitClick = {
+
+        }
     )
 
 }

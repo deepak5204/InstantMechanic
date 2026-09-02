@@ -59,7 +59,10 @@ fun AppNavHost(modifier: Modifier = Modifier) {
 
             if (mechanic != null) {
                 RequestServiceScreen(
-                    mechanic = mechanic
+                    mechanic = mechanic,
+                    onSubmitClick = {
+                        navController.navigate(Screen.Home.route)
+                    }
                 )
             }
         }
