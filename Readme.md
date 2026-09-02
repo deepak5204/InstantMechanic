@@ -81,21 +81,33 @@ Retrofit
 
 ```text
 com.example.instantmechanic
-│
 ├── data
 │   ├── dummy
+│   │   └── DummyMechanicsData
 │   ├── network
+│   │   └── NetworkModule
 │   ├── remote
+│   │   └── MechanicApiService
 │   └── repository
-│
-├── domain
-│   └── model
-│
+│       └── MechanicRepository
+├── domain.model
+│   └── Mechanic.kt
 └── presentation
-    ├── home
+    ├── components
+    │   ├── ErrorScreen.kt
+    │   └── ServiceCard.kt
     ├── details
+    │   └── MechanicDetailsScreen.kt
+    ├── home
+    │   ├── HomeScreen.kt
+    │   └── MechanicUiState
+    ├── navigation
+    │   ├── AppNavHost.kt
+    │   └── Screen
     ├── service
-    └── navigation
+    │   └── RequestServiceScreen.kt
+    └── viewModel
+        └── MechanicViewModel
 ```
 
 ## API Integration
@@ -105,7 +117,7 @@ The application uses **Retrofit** for REST API communication and **Gson** for JS
 A mock REST API is used for the assignment:
 
 ```text
-backend api
+ // backend api will add late
 ```
 
 
