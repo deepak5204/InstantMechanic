@@ -1,12 +1,11 @@
+package com.example.instantmechanic.presentation.details
+
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -33,13 +32,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.instantmechanic.domain.model.Mechanic
 import com.example.instantmechanic.domain.model.MechanicService
+import com.example.instantmechanic.presentation.components.ServiceCard
+import com.example.instantmechanic.ui.theme.PrimaryButtonBlue
+import com.example.instantmechanic.ui.theme.StarYellow
+import com.example.instantmechanic.ui.theme.StatusClosedBg
+import com.example.instantmechanic.ui.theme.StatusOpenBg
+import com.example.instantmechanic.ui.theme.StatusOpenGreen
 
-
+// Clean screen file holding only Screen-level compositions
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun MechanicDetailsScreen(
@@ -57,9 +61,7 @@ fun MechanicDetailsScreen(
                         .padding(16.dp)
                         .height(52.dp),
                     shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF1E88E5)
-                    )
+                    colors = ButtonDefaults.buttonColors(containerColor = PrimaryButtonBlue)
                 ) {
                     Text(
                         text = "Request Service", fontSize = 16.sp, fontWeight = FontWeight.Bold
@@ -90,7 +92,7 @@ fun MechanicDetailsScreen(
                     Icon(
                         imageVector = Icons.Default.Star,
                         contentDescription = "Rating",
-                        tint = Color(0xFFFFB300),
+                        tint = StarYellow,
                         modifier = Modifier.size(20.dp)
                     )
                     Text(
@@ -99,7 +101,7 @@ fun MechanicDetailsScreen(
                         style = MaterialTheme.typography.bodyLarge
                     )
                     Text(
-                        text = "(${mechanic.ratingCount ?: 30} reviews)",
+                        text = "(${mechanic.ratingCount ?: 0} reviews)",
                         color = Color.Gray,
                         style = MaterialTheme.typography.bodyMedium
                     )
@@ -117,9 +119,7 @@ fun MechanicDetailsScreen(
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.primary
                     )
-                    Text(
-                        text = mechanic.address, style = MaterialTheme.typography.bodyLarge
-                    )
+                    Text(text = mechanic.address, style = MaterialTheme.typography.bodyLarge)
                 }
 
                 Row(
@@ -131,20 +131,17 @@ fun MechanicDetailsScreen(
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.primary
                     )
-                    Text(
-                        text = mechanic.phoneNumber, style = MaterialTheme.typography.bodyLarge
-                    )
+                    Text(text = mechanic.phoneNumber, style = MaterialTheme.typography.bodyLarge)
                 }
             }
 
             HorizontalDivider()
 
-            ServicesGridSection(
-                services = mechanic.services
-            )
+            ServicesGridSection(services = mechanic.services)
 
             HorizontalDivider()
-            // Working Hours Section (Single multi-line String)
+
+            // Working Hours Section
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -158,18 +155,15 @@ fun MechanicDetailsScreen(
                     )
                     Text(
                         text = if (mechanic.isOpen) "Open Now" else "Closed",
-                        color = if (mechanic.isOpen) Color(0xFF2E7D32) else Color.Red,
+                        color = if (mechanic.isOpen) StatusOpenGreen else Color.Red,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
                             .clip(RoundedCornerShape(4.dp))
-                            .background(
-                                if (mechanic.isOpen) Color(0xFFE8F5E9) else Color(0xFFFFEBEE)
-                            )
+                            .background(if (mechanic.isOpen) StatusOpenBg else StatusClosedBg)
                             .padding(horizontal = 8.dp, vertical = 4.dp)
                     )
                 }
 
-                // Displays the exact formatted string layout from your image
                 Text(
                     text = mechanic.workingHours,
                     style = MaterialTheme.typography.bodyLarge,
@@ -178,10 +172,10 @@ fun MechanicDetailsScreen(
                     lineHeight = 25.sp
                 )
             }
-
         }
     }
 }
+
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -197,8 +191,6 @@ fun ServicesGridSection(
             fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.onSurface
         )
-
-        // FlowRow auto-calculates row wrapping while keeping uniform spacing
         FlowRow(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -215,60 +207,3 @@ fun ServicesGridSection(
     }
 }
 
-
-// Production Color Definitions for this design
-val CustomWrenchIconColor = Color(0xFF5A6273) // Grey/blue wrench
-val CustomCardBorderColor = Color(0xFFECEEF2) // Soft border
-val CustomCardBackdropColor = Color(0xFFFAFBFE) // Light backdrop card
-
-@Composable
-fun ServiceCard(
-    service: MechanicService, modifier: Modifier = Modifier
-) {
-    // Surface provides the background, shape, and click handling
-    Surface(
-        modifier = modifier
-            .fillMaxWidth() // Fill width of its container (crucial for grid)
-            .border(width = 1.dp, color = CustomCardBorderColor, shape = RoundedCornerShape(16.dp))
-            .clip(RoundedCornerShape(16.dp)),
-        shape = RoundedCornerShape(16.dp),
-        color = CustomCardBackdropColor, // Matches the backdrop
-        tonalElevation = 1.dp // Very slight elevation shadow
-    ) {
-        Column(
-            modifier = Modifier.padding(
-                horizontal = 16.dp, vertical = 20.dp
-            ), // Increased padding for comfort
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            // Icon Container Box with distinct tinted background (soft gray)
-            Box(
-                modifier = Modifier
-                    .size(64.dp) // Large icon box
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(Color(0xFFE9EBED)), // Distinct grey-ish icon box color
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = service.icon,
-                    contentDescription = service.name,
-                    tint = CustomWrenchIconColor, // Matches the wrench color in the design
-                    modifier = Modifier.size(28.dp) // Large icon size
-                )
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = service.name,
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center,
-                fontSize = 15.sp, // Reduced size to allow longer titles to breathe
-                maxLines = 2
-            )
-        }
-    }
-}

@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.instantmechanic.domain.model.Mechanic
-import com.example.instantmechanic.presentation.utils.ErrorScreen
+import com.example.instantmechanic.presentation.components.ErrorScreen
 import com.example.instantmechanic.presentation.viewModel.MechanicViewModel
 
 @Composable

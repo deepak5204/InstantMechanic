@@ -1,4 +1,4 @@
-package com.example.instantmechanic.presentation.utils
+package com.example.instantmechanic.presentation.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
