@@ -1,12 +1,13 @@
 package com.example.instantmechanic.presentation.navigation
 
+import MechanicDetailsScreen
+import android.R.string.no
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.instantmechanic.data.dummy.DummyMechanicsData
-import com.example.instantmechanic.presentation.details.MechanicDetailsScreen
 import com.example.instantmechanic.presentation.home.HomeScreen
 import com.example.instantmechanic.presentation.service.RequestServiceScreen
 
@@ -39,11 +40,12 @@ fun AppNavHost(modifier: Modifier = Modifier) {
             if (mechanic != null) {
                 MechanicDetailsScreen(
                     mechanic = mechanic,
-                    onRequestServiceClick = {
+                    onRequestService = {
                         navController.navigate(
                             "${Screen.RequestService.route}/${mechanic.id}"
                         )
-                    }
+                    },
+
                 )
             }
         }

@@ -174,7 +174,7 @@ fun MechanicCard(
                 verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 visibleServices.forEach { service ->
-                    ServiceTag(text = service)
+                    ServiceTag(text = service.name)
                 }
                 if (remainingCount > 0) {
                     ServiceTag(text = "+$remainingCount")

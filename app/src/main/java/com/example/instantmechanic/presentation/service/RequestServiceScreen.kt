@@ -132,10 +132,10 @@ fun RequestServiceScreen(
 
                     DropdownMenuItem(
                         text = {
-                            Text(service)
+                            Text(service.name)
                         },
                         onClick = {
-                            selectedService = service
+                            selectedService = service.name
                             isServiceMenuExpanded = false
                         }
                     )
