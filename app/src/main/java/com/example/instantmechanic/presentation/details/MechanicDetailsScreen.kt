@@ -1,11 +1,16 @@
 package com.example.instantmechanic.presentation.details
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -109,31 +115,10 @@ fun MechanicDetailsScreen(
             }
 
             // Location & Contact
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.LocationOn,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                    Text(text = mechanic.address, style = MaterialTheme.typography.bodyLarge)
-                }
-
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Call,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                    Text(text = mechanic.phoneNumber, style = MaterialTheme.typography.bodyLarge)
-                }
-            }
+            LocationAndContactSection(
+                address = mechanic.address,
+                phoneNumber = mechanic.phoneNumber
+            )
 
             HorizontalDivider()
 
@@ -207,3 +192,107 @@ fun ServicesGridSection(
     }
 }
 
+
+@Composable
+fun LocationAndContactSection(
+    address: String,
+    phoneNumber: String
+) {
+    val context = LocalContext.current
+
+    Column(
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        // --- Location Row ---
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .clickable {
+                    // Opens Google Maps or default map viewer
+                    val mapUri = Uri.parse("geo:0,0?q=${Uri.encode(address)}")
+                    val mapIntent = Intent(Intent.ACTION_VIEW, mapUri)
+                    context.startActivity(mapIntent)
+                }
+                .padding(vertical = 4.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Styled Icon Container
+            Surface(
+                shape = RoundedCornerShape(12.dp),
+                color = MaterialTheme.colorScheme.primaryContainer,
+                modifier = Modifier.size(44.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(
+                        imageVector = Icons.Default.LocationOn,
+                        contentDescription = "Location",
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+            }
+
+            Column {
+                Text(
+                    text = "Address",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.outline
+                )
+                Text(
+                    text = address,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        }
+
+        // --- Call Row ---
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .clickable {
+                    // Opens device phone dialer with number pre-filled
+                    val dialUri = Uri.parse("tel:$phoneNumber")
+                    val dialIntent = Intent(Intent.ACTION_DIAL, dialUri)
+                    context.startActivity(dialIntent)
+                }
+                .padding(vertical = 4.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Styled Icon Container
+            Surface(
+                shape = RoundedCornerShape(12.dp),
+                color = MaterialTheme.colorScheme.secondaryContainer,
+                modifier = Modifier.size(44.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(
+                        imageVector = Icons.Default.Call,
+                        contentDescription = "Call",
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                        modifier = Modifier.size(22.dp)
+                    )
+                }
+            }
+
+            Column {
+                Text(
+                    text = "Phone Number",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.outline
+                )
+                Text(
+                    text = phoneNumber,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        }
+    }
+}
